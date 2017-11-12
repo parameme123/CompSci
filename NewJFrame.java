@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -71,18 +72,20 @@ public class NewJFrame extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
       
     	JFileChooser fileChooser = new JFileChooser();
+    	fileChooser.setMultiSelectionEnabled(true);
     	fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
     	int result = fileChooser.showOpenDialog(this);
     	if (result == JFileChooser.APPROVE_OPTION) {
-    	    File selectedFile = fileChooser.getSelectedFile();
-    	    System.out.println("Selected file: " + selectedFile.getAbsolutePath());
-    	    FileEncryptor file = new FileEncryptor(selectedFile);
-    	
+    	    File[] selectedFiles = fileChooser.getSelectedFiles();
+    	    for(File file : selectedFiles) {
+    	    	System.out.println("selected files..."+file.getAbsolutePath());
+    	    }
+    	    FileEncryptor file = new FileEncryptor();
     	    try {
     	    	String password =file.passwordGen();
     	    	JOptionPane.showInputDialog(this, "Your password", password);
-				byte [] data = file.Encrypt(password);
-				file.writeFileEn(data);
+				ArrayList<byte[]> data = file.Encrypt(password, selectedFiles);
+				file.writeFileEn(data, selectedFiles);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -94,6 +97,7 @@ public class NewJFrame extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
     	
     	JFileChooser fileChooser = new JFileChooser();
+    	fileChooser.setMultiSelectionEnabled(true);
     	fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
     	int result = fileChooser.showOpenDialog(this);
     	if (result == JFileChooser.APPROVE_OPTION) {

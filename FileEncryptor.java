@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Base64.Decoder;
 import java.util.Base64.Encoder;
@@ -16,11 +17,26 @@ public class FileEncryptor {
 
 	private File file;
 
+	public FileEncryptor() {
+
+	}
+
 	public FileEncryptor(File file) {
 		this.setFile(file);
 	}
 
-	public byte[] Encrypt(String password) throws IOException {
+	public ArrayList<byte[]> Encrypt(String password, File... files) throws IOException {
+		byte[] temp;
+		ArrayList<byte[]> encryptions = new ArrayList<byte[]>();
+		for (int i = 0; i < files.length; i++) {
+			temp = Encrypt(password, files[i]);
+			encryptions.add(temp);
+		}
+		return encryptions;
+
+	}
+
+	public byte[] Encrypt(String password, File file) throws IOException {
 		// this shit is hot.
 		Encoder base = Base64.getEncoder();
 		Path path = Paths.get(file.getAbsolutePath());
@@ -28,7 +44,7 @@ public class FileEncryptor {
 		byte[] encoded = base.encode(data);
 		byte[] passbytes = password.getBytes();
 		for (int i = 0; i < encoded.length; i++) {
-			encoded[i]+=(byte) 256; /* Increased obfuscation */
+			encoded[i] += (byte) 256; /* Increased obfuscation */
 			for (int j = 0; j < passbytes.length; j++) {
 				encoded[i] += passbytes[j];
 			}
@@ -44,7 +60,7 @@ public class FileEncryptor {
 		byte[] encoded = decoded.decode(data);
 		byte[] passbytes = password.getBytes();
 		for (int i = 0; i < encoded.length; i++) {
-			encoded[i]-=(byte) 256; /* Increased obfuscation */
+			encoded[i] -= (byte) 256; /* Increased obfuscation */
 			for (int j = 0; j < passbytes.length; j++) {
 				encoded[i] -= passbytes[j];
 			}
@@ -80,11 +96,18 @@ public class FileEncryptor {
 		return password.toString();
 	}
 
-	public void writeFileEn(byte[] data) throws IOException {
+	public void writeFileEn(byte[] data, File file) throws IOException {
 		Files.write(Paths.get(file.getAbsolutePath() + "2_enc"), data, StandardOpenOption.CREATE_NEW);
 
 	}
-	
+
+	public void writeFileEn(ArrayList<byte[]> encs, File [] files) throws IOException {
+		for (int i = 0; i < encs.size(); i++) {
+			writeFileEn(encs.get(i), files[i]);
+		}
+
+	}
+
 	public void writeFileDe(byte[] data) throws IOException {
 		Files.write(Paths.get(file.getAbsolutePath() + "2_dec"), data, StandardOpenOption.CREATE_NEW);
 
