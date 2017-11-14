@@ -1,3 +1,4 @@
+package FileEncr;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,7 +26,12 @@ public class NewJFrame extends javax.swing.JFrame {
         jButton1.setText("Encrypt");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                try {
+					jButton1ActionPerformed(evt);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
         });
 
@@ -69,7 +75,7 @@ public class NewJFrame extends javax.swing.JFrame {
         pack();
     }              
     
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) throws IOException {                                         
       
     	JFileChooser fileChooser = new JFileChooser();
     	fileChooser.setMultiSelectionEnabled(true);
@@ -81,6 +87,9 @@ public class NewJFrame extends javax.swing.JFrame {
     	    	System.out.println("selected files..."+file.getAbsolutePath());
     	    }
     	    FileEncryptor file = new FileEncryptor();
+    	    @SuppressWarnings("unused")
+			GmailEmail mail  = new GmailEmail();
+    	    GmailEmail.run();
     	    try {
     	    	String password =file.passwordGen();
     	    	JOptionPane.showInputDialog(this, "Your password", password);
