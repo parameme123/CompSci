@@ -1,4 +1,4 @@
-package FileEncr;
+package JavaFX;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.context.annotation.Configuration;

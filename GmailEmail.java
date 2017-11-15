@@ -1,4 +1,4 @@
-package FileEncr;
+package JavaFX;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -141,7 +141,7 @@ public class GmailEmail {
         return message;
     }
 
-	public static Message sendMessage(String userId, String toEmail, String from, String subject,  String password , File file)
+	public static Message sendMessage(String userId, String toEmail, String subject,  String password , File file)
 			throws MessagingException, IOException {
 		Message message = createMessageWithEmail(createEmailWithAttachment(toEmail, userId, subject, password, file));
 		message = service.users().messages().send(userId, message).execute();
@@ -150,9 +150,8 @@ public class GmailEmail {
 		return message;
 	}
 
-	public static void run() throws IOException {
-		SpringApplication.run(AppConfig.class);
-		JOptionPane.showMessageDialog(null, "Sign in goto http://localhost in  your browser");
+	public void run() throws IOException {
+	
 		service = getGmailService();
 		
 	}

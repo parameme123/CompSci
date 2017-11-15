@@ -4,31 +4,29 @@
     <meta name="google-signin-client_id" content="103607819112-bckuc4tdeti6hq9iqc90mpsg427dljdp.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous"/>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
   </head>
   <body>
-    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+  
+  <div class="container-fluid" style="text-align:center">
+    
+    <h2>Welcome to FileEncryptor</h2>
+    <p>Plesae sign in with your google account.</p>
+    
+    <div class="g-signin2"  style="margin-left: 47%;" data-onsuccess="onSignIn"></div>
+    
     <script>
       function onSignIn(googleUser) {
-        // Useful data for your client-side scripts:
-        var profile = googleUser.getBasicProfile();
-        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
-        console.log('Full Name: ' + profile.getName());
-        console.log('Given Name: ' + profile.getGivenName());
-        console.log('Family Name: ' + profile.getFamilyName());
-        console.log("Image URL: " + profile.getImageUrl());
-        console.log("Email: " + profile.getEmail());
-
-        // The ID token you need to pass to your backend:
         var id_token = googleUser.getAuthResponse().id_token;
         document.getElementById ("token").value = id_token;
-        
         console.log("ID Token: " + id_token);
         $.ajax({
         type: 'POST',
         data: $('form').serialize(),
         url: 'signedin',
         success: function(data) {   
-         window.location.replace("/signedin");
+         window.location.replace("/file");
         }});
         
       };
@@ -39,5 +37,7 @@
     <form method="POST">
     <input type="hidden" name="token" id="token" value=""></input>
     </form> 
+    </div>
+    
   </body>
 </html>

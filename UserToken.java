@@ -1,4 +1,4 @@
-package FileEncr;
+package JavaFX;
 
 public class UserToken {
 
