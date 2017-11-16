@@ -18,6 +18,7 @@ public class FileEncryptor {
 
 	private File file;
 	private String fileNameEn;
+	private String fileNameDe;
 
 	public FileEncryptor() {
 
@@ -65,10 +66,9 @@ public class FileEncryptor {
 		return doubleEncoded;
 	}
 
-	public byte[] Decrypt(String password) throws IOException {
+	public byte[] Decrypt(String password,byte [] bytes) throws IOException {
 		Decoder decoded = Base64.getDecoder();
-		Path path = Paths.get(file.getAbsolutePath());
-		byte[] data = Files.readAllBytes(path);
+		byte[] data = bytes;
 		byte[] encoded = decoded.decode(data);
 		byte[] passbytes = password.getBytes();
 		for (int i = 0; i < encoded.length; i++) {
@@ -123,7 +123,18 @@ public class FileEncryptor {
 
 	public void writeFileDe(byte[] data) throws IOException {
 		Files.write(Paths.get(file.getAbsolutePath() + "2_dec"), data, StandardOpenOption.CREATE_NEW);
-		
+		fileNameDe = file.getAbsolutePath() + "2_dec";
+	}
+	
+	
+	
+
+	public String getFileNameDe() {
+		return fileNameDe;
+	}
+
+	public void setFileNameDe(String fileNameDe) {
+		this.fileNameDe = fileNameDe;
 	}
 
 	public File getFile() {

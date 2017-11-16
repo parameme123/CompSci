@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import org.springframework.boot.SpringApplication;
 
@@ -26,10 +27,14 @@ public class Main extends JFrame implements WindowListener {
 		if (creds.exists()) {
 			creds.delete();
 		}
-		setSize(300, 300);
+		this.setTitle("Web");
+		setSize(500, 150);
+		this.add(new JLabel("Web Server running  in the background please go to http://localhost in your browser"));
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.addWindowListener(this);
+		this.pack();
+		this.setResizable(false);
 		SpringApplication.run(AppConfig.class);
 
 	}

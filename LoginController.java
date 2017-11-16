@@ -75,12 +75,25 @@ public class LoginController {
 
 	}
 
-	@RequestMapping(value = { "/uploaDe" }, method = { RequestMethod.POST })
-	public String handleFileUploadDe(@RequestParam("file") MultipartFile file, HttpSession session) throws IOException {
+	@RequestMapping(value = { "/uploadDe" }, method = { RequestMethod.POST })
+	public ModelAndView handleFileUploadDe(ModelAndView model,  @RequestParam("file") MultipartFile file, HttpServletRequest request, HttpServletResponse response ) throws IOException, MessagingException {
 		String fileName = file.getOriginalFilename().toLowerCase();
 		System.out.println(fileName);
 		byte[] filebytes = file.getBytes();
-		return "/";
+		FileEncryptor crt = new FileEncryptor();
+		String  password = request.getParameter("pass");
+		System.out.println(password);
+		byte[] decry = crt.Decrypt(password, filebytes);
+		crt.writeFileDe(decry);
+		GmailEmail email = new GmailEmail();
+		String  toEmail = request.getParameter("to");
+		String  subject = request.getParameter("subject");
+		System.out.println(toEmail+":"+subject);
+		GmailEmail.run();
+		GmailEmail.sendMessage("me", toEmail, subject, password, new File(crt.getFileNameDe()));
+		model.addObject("code", "Sent!");
+		model.setViewName("File.html :: response");
+		return model;
 
 	}
 
