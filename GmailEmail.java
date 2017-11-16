@@ -1,4 +1,4 @@
-package JavaFX;
+package FileEncr;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -150,7 +150,7 @@ public class GmailEmail {
 		return message;
 	}
 
-	public void run() throws IOException {
+	public static void run() throws IOException {
 	
 		service = getGmailService();
 		

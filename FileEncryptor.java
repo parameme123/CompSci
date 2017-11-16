@@ -1,4 +1,4 @@
-package JavaFX;
+package FileEncr;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,6 +17,7 @@ import java.util.Random;
 public class FileEncryptor {
 
 	private File file;
+	private String fileNameEn;
 
 	public FileEncryptor() {
 
@@ -35,6 +36,16 @@ public class FileEncryptor {
 		}
 		return encryptions;
 
+	}
+	
+	
+
+	public String getFileNameEn() {
+		return fileNameEn;
+	}
+
+	public void setFileNameEn(String fileNameEn) {
+		this.fileNameEn = fileNameEn;
 	}
 
 	public byte[] Encrypt(String password, File file) throws IOException {
@@ -99,6 +110,7 @@ public class FileEncryptor {
 
 	public void writeFileEn(byte[] data, File file) throws IOException {
 		Files.write(Paths.get(file.getAbsolutePath() + "2_enc"), data, StandardOpenOption.CREATE_NEW);
+		fileNameEn = file.getAbsolutePath() + "2_enc";
 
 	}
 
@@ -111,7 +123,7 @@ public class FileEncryptor {
 
 	public void writeFileDe(byte[] data) throws IOException {
 		Files.write(Paths.get(file.getAbsolutePath() + "2_dec"), data, StandardOpenOption.CREATE_NEW);
-
+		
 	}
 
 	public File getFile() {

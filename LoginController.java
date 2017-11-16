@@ -1,5 +1,6 @@
-package JavaFX;
+package FileEncr;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,75 +19,79 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.common.io.Files;
 
-@Controller 
+@Controller
 public class LoginController {
 
 	@RequestMapping(value = { "/" }, method = { RequestMethod.GET })
 	public ModelAndView login(ModelAndView model) {
 		model.setViewName("gmail.html");
 		return model;
-		
+
 	}
-	
+
 	@RequestMapping(value = { "/signedin" }, method = { RequestMethod.POST })
-	public ModelAndView getToken( ModelAndView model, HttpServletRequest request)   {
+	public ModelAndView getToken(ModelAndView model, HttpServletRequest request) {
 		String token = request.getParameter("token");
 		UserToken.setToken(token);
 		model.setViewName("signedin.html");
 		return model;
-		
 
 	}
+
 	@RequestMapping(value = { "/signedin" }, method = { RequestMethod.GET })
-	public ModelAndView signedin(ModelAndView model)   {
+	public ModelAndView signedin(ModelAndView model) {
 		model.setViewName("signedin.html");
 		return model;
-		
-	}
-	
-	
-	
-	
-	@RequestMapping(value = { "/uploadEn" }, method = { RequestMethod.POST })
-	public ModelAndView handleFileUploadEe(ModelAndView model, @RequestParam("file") MultipartFile file, HttpSession session) throws IOException, MessagingException {
-			String fileName = file.getOriginalFilename().toLowerCase();
-			System.out.println(fileName);
-			byte[] filebytes = file.getBytes();
-			FileEncryptor crt  = new FileEncryptor();
-			String pass = crt.passwordGen();
-			Files.write(filebytes, new File(fileName));
-			File fileToSend = new File(fileName);
-			crt.Encrypt(pass, fileToSend);
-			GmailEmail email = new  GmailEmail ();
-			email.run();
-			GmailEmail.sendMessage("me", "sil3nt884@hotmail.co.uk", "files", pass, fileToSend);
-			
-			model.addObject("code", "Sent!");
-			model.setViewName("File.html :: response");
-			return model;
-			
+
 	}
 
-	
+	@RequestMapping(value = { "/uploadEn" }, method = { RequestMethod.POST })
+	public ModelAndView handleFileUploadEe(ModelAndView model, @RequestParam("file") MultipartFile file ,  HttpServletRequest request, HttpServletResponse response ) throws IOException, MessagingException {
+		String fileName = file.getOriginalFilename().toLowerCase();
+		System.out.println(fileName);
+		byte[] filebytes = file.getBytes();
+		FileEncryptor crt = new FileEncryptor();
+		String pass = crt.passwordGen();
+		FileWriter write = new FileWriter(fileName);
+		for (int i = 0; i < filebytes.length; i++) {
+			write.write(filebytes[i]);
+		}
+		write.flush();
+		write.close();
+		File normal = new File(fileName);
+		byte[] encBytes = crt.Encrypt(pass, normal);
+		crt.writeFileEn(encBytes, normal);
+		System.out.println (crt.getFileNameEn());
+		GmailEmail email = new GmailEmail();
+		String  toEmail = request.getParameter("to");
+		String  subject = request.getParameter("subject");
+		System.out.println(toEmail+":"+subject);
+		GmailEmail.run();
+		GmailEmail.sendMessage("me", toEmail, subject, pass, new File(crt.getFileNameEn()));
+
+		model.addObject("code", "Sent!");
+		model.setViewName("File.html :: response");
+		return model;
+
+	}
+
 	@RequestMapping(value = { "/uploaDe" }, method = { RequestMethod.POST })
 	public String handleFileUploadDe(@RequestParam("file") MultipartFile file, HttpSession session) throws IOException {
-			String fileName = file.getOriginalFilename().toLowerCase();
-			System.out.println(fileName);
-			byte[] filebytes = file.getBytes();
-			return "/";
-			
+		String fileName = file.getOriginalFilename().toLowerCase();
+		System.out.println(fileName);
+		byte[] filebytes = file.getBytes();
+		return "/";
+
 	}
 
-	
 	@RequestMapping(value = { "/file" }, method = { RequestMethod.GET })
-	public ModelAndView file(ModelAndView model)   {
-		if(UserToken.getToken()!=null) {
-				model.setViewName("File.html");
-		}
-		else {
+	public ModelAndView file(ModelAndView model) {
+		if (UserToken.getToken() != null) {
+			model.setViewName("File.html");
+		} else {
 			model.setViewName("signedin.html");
 		}
 		return model;
-		
+
 	}
 }

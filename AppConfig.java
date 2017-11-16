@@ -1,4 +1,4 @@
-package JavaFX;
+package FileEncr;
 
 import java.io.File;
 
@@ -25,7 +25,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
 @Configuration
-@ComponentScan("JavaFX")
+@ComponentScan("FileEncr")
 @Import({ThymeleafAutoConfiguration.class, DispatcherServlet.class, StandardServletMultipartResolver.class, MultipartAutoConfiguration.class })
 @EnableWebMvc
 public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
