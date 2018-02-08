@@ -83,7 +83,6 @@ public class GmailEmail {
 			System.exit(1);
 		}
 	}
-
 	public static Credential authorize() throws IOException {
 		// Load client secrets.
 		InputStream in = new FileInputStream(new File("client_secret.json"));
@@ -95,14 +94,13 @@ public class GmailEmail {
 		System.out.println("Credentials saved to " + DATA_STORE_DIR.getAbsolutePath());
 		return credential;
 	}
-
 	public static Gmail getGmailService() throws IOException {
 		Credential credential = authorize();
 		return new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).setApplicationName(APPLICATION_NAME).build();
 	}
 
 	public static MimeMessage createEmailWithAttachment(String to, String from, String subject, String bodyText,
-			File file) throws MessagingException, IOException {
+		File file) throws MessagingException, IOException {
 		Properties props = new Properties();
 		Session session = Session.getDefaultInstance(props, null);
 
@@ -129,7 +127,6 @@ public class GmailEmail {
 
 		return email;
 	}
-	
 	public static Message createMessageWithEmail(MimeMessage emailContent)
             throws MessagingException, IOException {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
@@ -140,7 +137,6 @@ public class GmailEmail {
         message.setRaw(encodedEmail);
         return message;
     }
-
 	public static Message sendMessage(String userId, String toEmail, String subject,  String password , File file)
 			throws MessagingException, IOException {
 		Message message = createMessageWithEmail(createEmailWithAttachment(toEmail, userId, subject, password, file));
@@ -149,10 +145,7 @@ public class GmailEmail {
 		System.out.println(message.toPrettyString());
 		return message;
 	}
-
 	public static void run() throws IOException {
-	
 		service = getGmailService();
-		
 	}
 }
