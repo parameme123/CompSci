@@ -1,14 +1,11 @@
 package FileEncr;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.common.io.Files;
+ 
+import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
 
 @Controller
 public class LoginController {
@@ -62,12 +60,18 @@ public class LoginController {
 		byte[] encBytes = crt.Encrypt(pass, normal);
 		crt.writeFileEn(encBytes, normal);
 		System.out.println (crt.getFileNameEn());
+		@SuppressWarnings("unused")
 		GmailEmail email = new GmailEmail();
 		String  toEmail = request.getParameter("to");
 		String  subject = request.getParameter("subject");
 		System.out.println(toEmail+":"+subject);
 		GmailEmail.run();
-		GmailEmail.sendMessage("me", toEmail, subject, pass, new File(crt.getFileNameEn()));
+		try {
+			GmailEmail.sendMessage("me", toEmail, subject, pass, new File(crt.getFileNameEn()));
+		} catch (javax.mail.MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		model.addObject("code", "Sent!");
 		model.setViewName("File.html :: response");
@@ -85,12 +89,18 @@ public class LoginController {
 		System.out.println(password);
 		byte[] decry = crt.Decrypt(password, filebytes);
 		crt.writeFileDe(decry);
+		@SuppressWarnings("unused")
 		GmailEmail email = new GmailEmail();
 		String  toEmail = request.getParameter("to");
 		String  subject = request.getParameter("subject");
 		System.out.println(toEmail+":"+subject);
 		GmailEmail.run();
-		GmailEmail.sendMessage("me", toEmail, subject, password, new File(crt.getFileNameDe()));
+		try {
+			GmailEmail.sendMessage("me", toEmail, subject, password, new File(crt.getFileNameDe()));
+		} catch (javax.mail.MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		model.addObject("code", "Sent!");
 		model.setViewName("File.html :: response");
 		return model;
@@ -105,6 +115,35 @@ public class LoginController {
 			model.setViewName("signedin.html");
 		}
 		return model;
-
+	//////////////////////////////////////////////
+	//..........................................//	
+	//..……………………▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄...............//
+	//..……………▄▄█▓▓▓▒▒▒▒▒▒▒▒▒▒▓▓▓▓█▄▄............//
+	//..…………▄▀▀▓▒░░░░░░░░░░░░░░░░▒▓▓▀▄..........//
+	//..………▄▀▓▒▒░░░░░░░░░░░░░░░░░░░▒▒▓▀▄........//
+	//..…..█▓█▒░░░░░░░░░░░░░░░░░░░░░▒▓▒▓█.......//
+	//....▌▓▀▒░░░░░░░░░░░░░░░░░░░░░░░░▒▀▓█......//
+	//....█▌▓▒▒░░░░░░░░░░░░░░░░░░░░░░░░░▒▓█	....//
+	//.▐█▓▒░░░░░░░░░░░░░░░░░░░░░░░░░░░▒▓█▌	....//
+	//.█▓▒▒░░░░░░░░░░░░░░░░░░░░░░░░░░░░▒▓█	....//
+	//.█▐▒▒░░░░░░░░░░░░░░░░░░░░░░░░░░░▒▒█▓	....//
+	//.█▓█▒░░░░░░░░░░░░░░░░░░░░░░░░░░░▒█▌▓█.....//
+	//.█▓▓█▒░░░░░░░░░░░░░░░░░░░░░░░░░░▒█▓▓█.....//
+	//.█▓█▒░▒▒▒▒░░▀▀█▄▄░░░░░▄▄█▀▀░░▒▒▒▒░▒█▓█....//
+	//.█▓▌▒▒▓▓▓▓▄▄▄▒▒▒▀█░░░░█▀▒▒▒▄▄▄▓▓▓▓▒▒▐▓█...//
+	//.██▌▒▓███▓█████▓▒▐▌░░▐▌▒▓████▓████▓▒▐██...//
+	//..██▒▒▓███da ████▓▄░░░▄▓████boi ███▓▒▒██..//
+	//..█▓▒▒▓██████████▓▒░░░▒▓██████████▓▒▒▓█...//
+	//...█▓▒░▒▓███████▓▓▄▀░░▀▄▓▓███████▓▒▒▓█....//
+	//.....█▓▒░▒▒▓▓▓▓▄▄▄▀▒░░░░░▒▀▄▄▄▓▓▓▓▒▒░▓█...//
+	//......█▓▒░▒▒▒▒░░░░░▒▒▒▒▒▒░░░░░▒▒▒▒░▒▓█....//
+	//.......█▓▓▒▒▒░░░░░░░▒▒▒▒░░░░░▒▒▒▓▓█.......//
+	//........▀██▓▓▓▒░░▄▄▄▄▄▄▄▄▄▄░░▒▓█▀	........//
+	//.........▀█▓▒▒░░░░░░▀▀▀▀▒░░▒▒▓█▀..........//
+	//............██▓▓▒░░▒▒▒░▒▒▒░▒▓██...........//
+	//..............█▓▒▒▒░░░░░▒▒▒▓█	............//
+	//................▀▀█▓▓▓▓▓▓█▀...............//
+	//..........................................//
+	//////////////////////////////////////////////
 	}
 }

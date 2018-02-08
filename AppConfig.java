@@ -52,7 +52,7 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 	@Bean
 	public JettyEmbeddedServletContainerFactory jetty() {
 		JettyEmbeddedServletContainerFactory factory = new JettyEmbeddedServletContainerFactory();
-		factory.setPort(80);
+		factory.setPort(8080);
 		factory.setDocumentRoot(new File("/web"));
 		return factory;
 	}
@@ -66,7 +66,6 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 		return resolver;
 	}
 
-	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 
 		this.applicationContext = applicationContext;

@@ -39,8 +39,6 @@ public class FileEncryptor {
 
 	}
 	
-	
-
 	public String getFileNameEn() {
 		return fileNameEn;
 	}
@@ -50,14 +48,13 @@ public class FileEncryptor {
 	}
 
 	public byte[] Encrypt(String password, File file) throws IOException {
-		// this shit is hot.
 		Encoder base = Base64.getEncoder();
 		Path path = Paths.get(file.getAbsolutePath());
 		byte[] data = Files.readAllBytes(path);
 		byte[] encoded = base.encode(data);
 		byte[] passbytes = password.getBytes();
 		for (int i = 0; i < encoded.length; i++) {
-			encoded[i] += (byte) 256; /* Increased obfuscation */
+			encoded[i] += (byte) 256;
 			for (int j = 0; j < passbytes.length; j++) {
 				encoded[i] += passbytes[j];
 			}
@@ -65,14 +62,14 @@ public class FileEncryptor {
 		byte[] doubleEncoded = base.encode(encoded);
 		return doubleEncoded;
 	}
-
+	
 	public byte[] Decrypt(String password,byte [] bytes) throws IOException {
 		Decoder decoded = Base64.getDecoder();
 		byte[] data = bytes;
 		byte[] encoded = decoded.decode(data);
 		byte[] passbytes = password.getBytes();
 		for (int i = 0; i < encoded.length; i++) {
-			encoded[i] -= (byte) 256; /* Increased obfuscation */
+			encoded[i] -= (byte) 256;
 			for (int j = 0; j < passbytes.length; j++) {
 				encoded[i] -= passbytes[j];
 			}
@@ -80,9 +77,8 @@ public class FileEncryptor {
 
 		byte[] doubledecoded = decoded.decode(encoded);
 		return doubledecoded;
-
 	}
-
+	
 	public char charGen() throws UnsupportedEncodingException {
 		Random ran = new Random();
 		int c = ran.nextInt(126);
@@ -96,7 +92,6 @@ public class FileEncryptor {
 		String chars = new String(bytes, "UTF-8");
 		char[] chararray = chars.toCharArray();
 		return chararray[0];
-
 	}
 
 	public String passwordGen() throws UnsupportedEncodingException {
@@ -125,9 +120,6 @@ public class FileEncryptor {
 		Files.write(Paths.get(file.getAbsolutePath() + "2_dec"), data, StandardOpenOption.CREATE_NEW);
 		fileNameDe = file.getAbsolutePath() + "2_dec";
 	}
-	
-	
-	
 
 	public String getFileNameDe() {
 		return fileNameDe;
