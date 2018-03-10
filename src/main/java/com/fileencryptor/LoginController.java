@@ -3,6 +3,7 @@ package com.fileencryptor;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
@@ -86,11 +87,50 @@ public class LoginController {
 			e.printStackTrace();
 		}
 
-		model.addObject("code", "Sent!");
-		model.setViewName("File.html :: response");
+		model.addObject("code", " Email Sent!");
+		model.setViewName("File.html :: email");
 		return model;
 
 	}
+	
+	
+	@RequestMapping(value = { "/delete" }, method = { RequestMethod.GET })
+	public ModelAndView deleteFiles(ModelAndView model) {
+		File  folder = new File ("web");
+		File[] webFiles = folder.listFiles();
+	    String urerdir = System.getProperty("user.dir");
+		File outside = new File (urerdir);  
+		File[] outsidefiles = outside.listFiles();
+		ArrayList<File> filesToDelete = new ArrayList<File>();
+		System.out.println(outside.getAbsolutePath());
+		for(int i=0; i<webFiles.length; i++) {
+			if(webFiles[i].getName().contains("_enc") || webFiles[i].getName().contains("_dec")) {
+				System.out.println(webFiles[i]);
+				filesToDelete.add(webFiles[i]);
+			}
+		}
+		
+		for(int i=0; i<outsidefiles.length; i++) {
+			if(outsidefiles[i].getName().contains("_dec") || outsidefiles[i].getName().contains("_enc")) {
+				System.out.println(outsidefiles[i]);
+				filesToDelete.add(outsidefiles[i]);
+			}
+		}
+		
+		for(int i=0; i<filesToDelete.size(); i++) {
+			filesToDelete.get(i).delete();
+		}
+		
+		
+		
+		model.addObject("delete", "Deleted");
+		model.setViewName("File.html :: delete");
+		return model;
+		
+		
+	}
+	
+	
 	/**
 	 * Uploads the decrypted file
 	 * @param model
@@ -118,6 +158,11 @@ public class LoginController {
 		return model;
 
 	}
+	
+	
+	
+	
+	
 
 	@RequestMapping(value = { "/file" }, method = { RequestMethod.GET })
 	public ModelAndView file(ModelAndView model) {

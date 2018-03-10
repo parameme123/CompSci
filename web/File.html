@@ -32,8 +32,8 @@
 <label for="file">  File</label>
 <input  type="file" class="form-control" name="file" id="file" placeholder="" >
 <input type="hidden" name="pass" id="pass" value="" ></input> 
-<input  onclick="uploadEn()" type="submit" class="form-control btn btn-primary" id="go" name="go" value="Encrypt">
-<button type="buttom" data-toggle="modal" class="form-control btn btn-primary" data-target="#myModal" id="go" name="go" value="Decrypt"> Dencrypt</button>
+<input  onclick="uploadEn()" type="submit" class="form-control btn btn-primary"  value="Encrypt">
+<button type="buttom" data-toggle="modal" class="form-control btn btn-primary" data-target="#myModal"  value="Decrypt"> Dencrypt</button>
 
 </div>
 </form>
@@ -60,8 +60,8 @@
   </div>
 </div>
 
-<div class="response" th:fragment="response"><a th:text="${text} " th:href="${download}" download> </a></div>
-
+<div class="response" th:fragment="response"><a th:text="${text}"  th:href="${download}" download> </a></div>
+<div class="email" th:fragment="email"></div>
 <script>
 
   $("form").submit(function(e){
@@ -77,10 +77,20 @@
             data: form,
             url: 'uploadEn',
             success: function(data) {   
-             $( "div.response" ).replaceWith(data); 
+             $( "div.email" ).replaceWith(data); 
+             $.get( "/delete", function() {
+            	 //do nothing.
+            })
         }});
     
     }
+    
+    function deleteFiles (){
+    	 $.get( "/delete", function() {
+        	 //do nothing.
+        });
+    }
+    
     
      function uploadDe(){
      var password  = $("#password").val();
