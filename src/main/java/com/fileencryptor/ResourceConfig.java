@@ -11,6 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @author Ricky
  *
  */
+@Configuration
 public class ResourceConfig extends WebMvcConfigurerAdapter {
 	@Configuration
 	public class ResourcesConfig extends WebMvcConfigurerAdapter {

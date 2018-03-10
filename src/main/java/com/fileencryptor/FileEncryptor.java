@@ -1,5 +1,6 @@
 package com.fileencryptor;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -210,7 +211,8 @@ public class FileEncryptor {
 
 	public void writeFileDe(byte[] data) throws IOException {
 		Files.write(Paths.get(file.getAbsolutePath() + "2_dec"), data, StandardOpenOption.CREATE_NEW);
-		fileNameDe = file.getAbsolutePath() + "2_dec";
+		fileNameDe =  file.getName()+"2_dec";
+		Files.copy(Paths.get(new File(fileNameDe).toURI()), new  FileOutputStream ("web/"+fileNameDe));
 	}
 
 	public String getFileNameDe() {

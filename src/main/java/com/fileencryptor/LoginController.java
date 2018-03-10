@@ -110,20 +110,10 @@ public class LoginController {
 		String  password = request.getParameter("pass");
 		System.out.println(password);
 		byte[] decry = crt.Decrypt(password, filebytes);
+		crt.setFile(new File(fileName));
 		crt.writeFileDe(decry);
-		@SuppressWarnings("unused")
-		GmailEmail email = new GmailEmail();
-		String  toEmail = request.getParameter("to");
-		String  subject = request.getParameter("subject");
-		System.out.println(toEmail+":"+subject);
-		GmailEmail.run();
-		try {
-			GmailEmail.sendMessage("me", toEmail, subject, password, new File(crt.getFileNameDe()));
-		} catch (javax.mail.MessagingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		model.addObject("code", "Sent!");
+		model.addObject("text", "Download Here!!");
+		model.addObject("download", crt.getFileNameDe());
 		model.setViewName("File.html :: response");
 		return model;
 
