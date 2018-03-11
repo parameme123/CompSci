@@ -2,10 +2,16 @@ package com.fileencryptor;
 
 import java.io.File;
 
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.ContextHandler;
+import org.eclipse.jetty.server.handler.HandlerCollection;
+import org.eclipse.jetty.server.handler.HandlerWrapper;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.MultipartAutoConfiguration;
 import org.springframework.boot.context.embedded.jetty.JettyEmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.jetty.JettyServerCustomizer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
@@ -79,7 +85,35 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 	@Bean
 	public JettyEmbeddedServletContainerFactory jetty() {
 		JettyEmbeddedServletContainerFactory factory = new JettyEmbeddedServletContainerFactory();
-		factory.setPort(8080);
+		factory.setPort(80);
+		factory.addServerCustomizers(new JettyServerCustomizer() {
+
+			@Override
+			public void customize(Server server) {
+				setHandlerMaxHttpPostSize(2000 * 1024 * 1024, server.getHandlers());
+				
+			}
+			
+			
+			 private void setHandlerMaxHttpPostSize(int maxHttpPostSize,
+                    Handler... handlers) {
+                for (Handler handler : handlers) {
+                    if (handler instanceof ContextHandler) {
+                        ((ContextHandler) handler)
+                                .setMaxFormContentSize(maxHttpPostSize);
+                    }
+                    else if (handler instanceof HandlerWrapper) {
+                        setHandlerMaxHttpPostSize(maxHttpPostSize,
+                                ((HandlerWrapper) handler).getHandler());
+                    }
+                    else if (handler instanceof HandlerCollection) {
+                        setHandlerMaxHttpPostSize(maxHttpPostSize,
+                                ((HandlerCollection) handler).getHandlers());
+                    }
+                }
+            }
+			
+		});
 		factory.setDocumentRoot(new File("web"));
 		return factory;
 	}

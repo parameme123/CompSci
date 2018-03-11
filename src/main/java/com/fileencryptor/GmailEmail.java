@@ -90,13 +90,15 @@ public class GmailEmail {
 		// Build flow and trigger user authorization request.
 		GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY,
 				clientSecrets, SCOPES).setDataStoreFactory(DATA_STORE_FACTORY).setAccessType("offline").build();
-		Credential credential = new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
+	
+		Credential credential = new CustomAuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
 		System.out.println("Credentials saved to " + DATA_STORE_DIR.getAbsolutePath());
 		return credential;
 	}
 	public static Gmail getGmailService() throws IOException {
 		Credential credential = authorize();
-		return new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).setApplicationName(APPLICATION_NAME).build();
+		Gmail builder = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).setApplicationName(APPLICATION_NAME).build(); 
+		return builder;
 	}
 
 	public static MimeMessage createEmailWithAttachment(String to, String from, String subject, String bodyText,
@@ -131,6 +133,7 @@ public class GmailEmail {
             throws MessagingException, IOException {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         emailContent.writeTo(buffer);
+        System.out.println("here...2");
         byte[] bytes = buffer.toByteArray();
         String encodedEmail = Base64.encodeBase64URLSafeString(bytes);
         Message message = new Message();
@@ -152,6 +155,7 @@ public class GmailEmail {
 			throws MessagingException, IOException {
 		Message message = createMessageWithEmail(createEmailWithAttachment(toEmail, userId, subject, password, file));
 		message = service.users().messages().send(userId, message).execute();
+		System.out.println("here...3");
 		System.out.println("Message id: " + message.getId());
 		System.out.println(message.toPrettyString());
 		return message;

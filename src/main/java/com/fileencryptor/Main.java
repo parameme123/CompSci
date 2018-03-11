@@ -23,7 +23,7 @@ public class Main {
 	private static final long serialVersionUID = 1L;
 
 	public Main() throws IOException {
-		Shell32.INSTANCE.ShellExecuteA(0, "open", "http://localhost:8080", null, null, 1);
+		Shell32.INSTANCE.ShellExecuteA(0, "open", "http://localhost", null, null, 1);
 		File Folder = new File("credentials");
 		if (!Folder.exists()) {
 			Folder.mkdir();
