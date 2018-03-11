@@ -8,14 +8,17 @@ import java.util.ArrayList;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import com.fileencryptor.*;
+
 
 /**
  * Exposes endpoints for jetty.
@@ -25,6 +28,8 @@ import com.fileencryptor.*;
 @Controller
 public class LoginController {
 
+	Timer timer = new Timer ();
+	
 	@RequestMapping(value = { "/" }, method = { RequestMethod.GET })
 	public ModelAndView login(ModelAndView model) {
 		model.setViewName("gmail.html");
@@ -47,6 +52,18 @@ public class LoginController {
 		return model;
 
 	}
+	
+	
+	
+	
+	@RequestMapping(value = { "/poll" }, method = { RequestMethod.GET })
+	@ResponseStatus(value = HttpStatus.OK)
+	public 	void  createSession (HttpSession session) {
+	
+	Timer.lastaccessed = session.getLastAccessedTime();
+	}
+	
+	
 	/**
 	 * This uploads the encrypted file 
 	 * @param model
@@ -89,6 +106,7 @@ public class LoginController {
 
 		model.addObject("code", " Email Sent!");
 		model.setViewName("File.html :: email");
+		
 		return model;
 
 	}

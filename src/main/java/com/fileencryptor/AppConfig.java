@@ -1,6 +1,7 @@
 package com.fileencryptor;
 
 import java.io.File;
+import java.util.concurrent.Executors;
 
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
@@ -18,6 +19,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.ViewResolver;
@@ -60,6 +64,13 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 
 		return resolver;
 	}
+	
+	
+	
+	 @Bean
+     public TaskScheduler taskExecutor () {
+         return new ConcurrentTaskScheduler(Executors.newScheduledThreadPool(3));
+     }
 	
 	/**
 	 * Tells the server to user Spring template Engine#
