@@ -3,6 +3,8 @@ package com.fileencryptor;
 import java.io.File;
 import java.util.concurrent.Executors;
 
+import javax.servlet.MultipartConfigElement;
+
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
@@ -11,6 +13,7 @@ import org.eclipse.jetty.server.handler.HandlerWrapper;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.MultipartAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.MultipartProperties;
 import org.springframework.boot.context.embedded.jetty.JettyEmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.jetty.JettyServerCustomizer;
 import org.springframework.context.ApplicationContext;
@@ -22,6 +25,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.ViewResolver;
@@ -45,7 +50,7 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 
 @Configuration
 @ComponentScan("com.fileencryptor")
-@Import({ThymeleafAutoConfiguration.class, DispatcherServlet.class, StandardServletMultipartResolver.class, MultipartAutoConfiguration.class })
+@Import({ThymeleafAutoConfiguration.class, DispatcherServlet.class, StandardServletMultipartResolver.class })
 @EnableWebMvc
 public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 
@@ -56,6 +61,18 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 	 * 
 	 * @return ViewResolver
 	 */
+	
+	 @Bean
+		public MultipartConfigElement multipartConfigElement() {
+		 MultipartProperties multipartProperties = new MultipartProperties();
+		 multipartProperties.setMaxFileSize("25MB");
+		 multipartProperties.setMaxRequestSize("25MB");
+		 multipartProperties.setFileSizeThreshold("25MB");
+			return multipartProperties.createMultipartConfig();
+		}
+	 
+	 
+	
 	
 	@Bean
 	public ViewResolver viewResolver() {
