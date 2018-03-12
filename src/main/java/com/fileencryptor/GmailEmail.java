@@ -90,8 +90,7 @@ public class GmailEmail {
 		// Build flow and trigger user authorization request.
 		GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY,
 				clientSecrets, SCOPES).setDataStoreFactory(DATA_STORE_FACTORY).setAccessType("offline").build();
-	
-		Credential credential = new CustomAuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
+		Credential credential = new CustomAuthorizationCodeInstalledApp(flow, new LocalServerReceiver.Builder().setPort(8080).build()).authorize("user");
 		System.out.println("Credentials saved to " + DATA_STORE_DIR.getAbsolutePath());
 		return credential;
 	}
@@ -102,7 +101,7 @@ public class GmailEmail {
 	}
 
 	public static MimeMessage createEmailWithAttachment(String to, String from, String subject, String bodyText,
-		File file) throws MessagingException, IOException {
+			File file) throws MessagingException, IOException {
 		Properties props = new Properties();
 		Session session = Session.getDefaultInstance(props, null);
 
@@ -130,16 +129,16 @@ public class GmailEmail {
 		return email;
 	}
 	public static Message createMessageWithEmail(MimeMessage emailContent)
-            throws MessagingException, IOException {
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        emailContent.writeTo(buffer);
-        System.out.println("here...2");
-        byte[] bytes = buffer.toByteArray();
-        String encodedEmail = Base64.encodeBase64URLSafeString(bytes);
-        Message message = new Message();
-        message.setRaw(encodedEmail);
-        return message;
-    }
+			throws MessagingException, IOException {
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		emailContent.writeTo(buffer);
+		System.out.println("here...2");
+		byte[] bytes = buffer.toByteArray();
+		String encodedEmail = Base64.encodeBase64URLSafeString(bytes);
+		Message message = new Message();
+		message.setRaw(encodedEmail);
+		return message;
+	}
 	/**
 	 * This creates the email and contains information such as the password in the subject header and who to the recipent is. 
 	 * @param userId

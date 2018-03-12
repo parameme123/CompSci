@@ -5,6 +5,12 @@ import com.sun.jna.platform.win32.ShellAPI;
 import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.win32.StdCallLibrary;
 
+/**
+ * imports the shell32 api for usage
+ * e.g for opening the browser automatically
+ * @author paradox
+ *
+ */
 public interface Shell32 extends ShellAPI, StdCallLibrary {
 
 	Shell32 INSTANCE = (Shell32) Native.loadLibrary("shell32", Shell32.class);

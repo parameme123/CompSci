@@ -5,7 +5,7 @@ package com.fileencryptor;
 public class UserToken {
 
 	private static String token;
-	
+
 	public static String getToken() {
 		return token;
 	}

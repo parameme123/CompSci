@@ -21,15 +21,18 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 /**
- * Exposes endpoints for jetty.
- * @author ADAM
- *
+ * Exposes endpoints for jetty to read
  */
 @Controller
+
+/**
+ * Creates a timer to ping the browser to detect it closing.
+ * @author paradox
+ */
 public class LoginController {
 
 	Timer timer = new Timer ();
-	
+
 	@RequestMapping(value = { "/" }, method = { RequestMethod.GET })
 	public ModelAndView login(ModelAndView model) {
 		model.setViewName("gmail.html");
@@ -52,18 +55,18 @@ public class LoginController {
 		return model;
 
 	}
-	
-	
-	
-	
+
+
+
+
 	@RequestMapping(value = { "/poll" }, method = { RequestMethod.GET })
 	@ResponseStatus(value = HttpStatus.OK)
 	public 	void  createSession (HttpSession session) {
-	
-	Timer.lastaccessed = session.getLastAccessedTime();
+
+		Timer.lastaccessed = session.getLastAccessedTime();
 	}
-	
-	
+
+
 	/**
 	 * This uploads the encrypted file 
 	 * @param model
@@ -106,17 +109,17 @@ public class LoginController {
 
 		model.addObject("code", " Email Sent!");
 		model.setViewName("File.html :: email");
-		
+
 		return model;
 
 	}
-	
-	
+
+
 	@RequestMapping(value = { "/delete" }, method = { RequestMethod.GET })
 	public ModelAndView deleteFiles(ModelAndView model) {
 		File  folder = new File ("web");
 		File[] webFiles = folder.listFiles();
-	    String urerdir = System.getProperty("user.dir");
+		String urerdir = System.getProperty("user.dir");
 		File outside = new File (urerdir);  
 		File[] outsidefiles = outside.listFiles();
 		ArrayList<File> filesToDelete = new ArrayList<File>();
@@ -127,28 +130,28 @@ public class LoginController {
 				filesToDelete.add(webFiles[i]);
 			}
 		}
-		
+
 		for(int i=0; i<outsidefiles.length; i++) {
 			if(outsidefiles[i].getName().contains("_dec") || outsidefiles[i].getName().contains("_enc")) {
 				System.out.println(outsidefiles[i]);
 				filesToDelete.add(outsidefiles[i]);
 			}
 		}
-		
+
 		for(int i=0; i<filesToDelete.size(); i++) {
 			filesToDelete.get(i).delete();
 		}
-		
-		
-		
+
+
+
 		model.addObject("delete", "Deleted");
 		model.setViewName("File.html :: delete");
 		return model;
-		
-		
+
+
 	}
-	
-	
+
+
 	/**
 	 * Uploads the decrypted file
 	 * @param model
@@ -170,17 +173,17 @@ public class LoginController {
 		byte[] decry = crt.Decrypt(password, filebytes);
 		crt.setFile(new File(fileName));
 		crt.writeFileDe(decry);
-		model.addObject("text", "Download Here!!");
+		model.addObject("text", "Click here to download your decrypted file");
 		model.addObject("download", crt.getFileNameDe());
 		model.setViewName("File.html :: response");
 		return model;
 
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 
 	@RequestMapping(value = { "/file" }, method = { RequestMethod.GET })
 	public ModelAndView file(ModelAndView model) {

@@ -11,18 +11,19 @@ public class CustomAuthorizationCodeInstalledApp extends AuthorizationCodeInstal
 
 	public CustomAuthorizationCodeInstalledApp(AuthorizationCodeFlow flow, VerificationCodeReceiver receiver) {
 		super(flow, receiver);
-		
+
 	}
-	
+
 	/**
-	 * Override Google api, opens up auth url via win32api shell 
+	 * Override Google api, opens up auth url via win32api shell. 
+	 * Used to fix the error of "please go to xxxxx in your browser for the auth code"
 	 */
-	
-	 protected void onAuthorization(AuthorizationCodeRequestUrl authorizationUrl) throws IOException {
-		 	String url = authorizationUrl.build();
-		 	Shell32.INSTANCE.ShellExecuteA(0, "open", url, null, null, 1);
-		    browse(url);
-	 }
-	
+
+	protected void onAuthorization(AuthorizationCodeRequestUrl authorizationUrl) throws IOException {
+		String url = authorizationUrl.build();
+		Shell32.INSTANCE.ShellExecuteA(0, "open", url, null, null, 1);
+		browse(url);
+	}
+
 
 }

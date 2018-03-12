@@ -15,47 +15,7 @@ import java.util.Base64.Encoder;
 import java.util.Random;
 
 /**
- * 
- * 
- * <pre> 
-	//////////////////////////////////////////////
-	//..........................................//	
-	//..……………………▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄...............//
-	//..……………▄▄█▓▓▓▒▒▒▒▒▒▒▒▒▒▓▓▓▓█▄▄............//
-	//..…………▄▀▀▓▒░░░░░░░░░░░░░░░░▒▓▓▀▄..........//
-	//..………▄▀▓▒▒░░░░░░░░░░░░░░░░░░░▒▒▓▀▄........//
-	//..…..█▓█▒░░░░░░░░░░░░░░░░░░░░░▒▓▒▓█.......//
-	//....▌▓▀▒░░░░░░░░░░░░░░░░░░░░░░░░▒▀▓█......//
-	//....█▌▓▒▒░░░░░░░░░░░░░░░░░░░░░░░░░▒▓█	....//
-	//.�?█▓▒░░░░░░░░░░░░░░░░░░░░░░░░░░░▒▓█▌	....//
-	//.█▓▒▒░░░░░░░░░░░░░░░░░░░░░░░░░░░░▒▓█	....//
-	//.█�?▒▒░░░░░░░░░░░░░░░░░░░░░░░░░░░▒▒█▓	....//
-	//.█▓█▒░░░░░░░░░░░░░░░░░░░░░░░░░░░▒█▌▓█.....//
-	//.█▓▓█▒░░░░░░░░░░░░░░░░░░░░░░░░░░▒█▓▓█.....//
-	//.█▓█▒░▒▒▒▒░░▀▀█▄▄░░░░░▄▄█▀▀░░▒▒▒▒░▒█▓█....//
-	//.█▓▌▒▒▓▓▓▓▄▄▄▒▒▒▀█░░░░█▀▒▒▒▄▄▄▓▓▓▓▒▒�?▓█...//
-	//.██▌▒▓███▓█████▓▒�?▌░░�?▌▒▓████▓████▓▒�?██...//
-	//..██▒▒▓███da ████▓▄░░░▄▓████boi ███▓▒▒██..//
-	//..█▓▒▒▓██████████▓▒░░░▒▓██████████▓▒▒▓█...//
-	//...█▓▒░▒▓███████▓▓▄▀░░▀▄▓▓███████▓▒▒▓█....//
-	//.....█▓▒░▒▒▓▓▓▓▄▄▄▀▒░░░░░▒▀▄▄▄▓▓▓▓▒▒░▓█...//
-	//......█▓▒░▒▒▒▒░░░░░▒▒▒▒▒▒░░░░░▒▒▒▒░▒▓█....//
-	//.......█▓▓▒▒▒░░░░░░░▒▒▒▒░░░░░▒▒▒▓▓█.......//
-	//........▀██▓▓▓▒░░▄▄▄▄▄▄▄▄▄▄░░▒▓█▀	........//
-	//.........▀█▓▒▒░░░░░░▀▀▀▀▒░░▒▒▓█▀..........//
-	//............██▓▓▒░░▒▒▒░▒▒▒░▒▓██...........//
-	//..............█▓▒▒▒░░░░░▒▒▒▓█	............//
-	//................▀▀█▓▓▓▓▓▓█▀...............//
-	//..........................................//
-	//////////////////////////////////////////////
-	 </pre>
-
-Create Encrypted files.
-
-
- * 
- * @author Richard 
- *
+Create Encrypted files and decrypts files
  */
 
 @SuppressWarnings("unused")
@@ -72,7 +32,7 @@ public class FileEncryptor {
 	public FileEncryptor(File file) {
 		this.setFile(file);
 	}
-	
+
 	/**
 	 * Takes in params password and Array of Files and passes to {@link #Encrypt(String , File ) Encrypt}
 	 * 
@@ -92,7 +52,7 @@ public class FileEncryptor {
 		return encryptions;
 
 	}
-	
+
 	public String getFileNameEn() {
 		return fileNameEn;
 	}
@@ -100,7 +60,7 @@ public class FileEncryptor {
 	public void setFileNameEn(String fileNameEn) {
 		this.fileNameEn = fileNameEn;
 	}
-	
+
 	/**
 	 * Creataes an encrypted file using a custom cipher. Converts data in Base64 and shifts each byte by 256 <br>
 	 * and by the ACSII repesentation of a random string password.
@@ -126,7 +86,7 @@ public class FileEncryptor {
 		byte[] doubleEncoded = base.encode(encoded);
 		return doubleEncoded;
 	}
-	
+
 	/**
 	 * Decrypts the encrypted file by doing the inverse of the custom cipher. Shifting back the data in base64 and by -256 bytes <br>
 	 * and reversing the ASCII representation of a randomly generated string password.
@@ -135,7 +95,7 @@ public class FileEncryptor {
 	 * @return
 	 * @throws IOException
 	 */
-	
+
 	public byte[] Decrypt(String password,byte [] bytes) throws IOException {
 		Decoder decoded = Base64.getDecoder();
 		byte[] data = bytes;
@@ -184,24 +144,24 @@ public class FileEncryptor {
 		System.out.println(password.toString());
 		return password.toString();
 	}
-/**
- * This is where the encrypted file is outputted onto the users computer. <br>
- * It takes the path of the original file, and outputs the encrypted file at the end and modifies the name putting "2_enc" so it is clear to the user which is the encrypted file.
- * @param data
- * @param file
- * @throws IOException
- */
+	/**
+	 * This is where the encrypted file is outputted onto the users computer. <br>
+	 * It takes the path of the original file, and outputs the encrypted file at the end and modifies the name putting "2_enc" so it is clear to the user which is the encrypted file.
+	 * @param data
+	 * @param file
+	 * @throws IOException
+	 */
 	public void writeFileEn(byte[] data, File file) throws IOException {
-		Files.write(Paths.get(file.getAbsolutePath() + "2_enc"), data, StandardOpenOption.CREATE_NEW);
-		fileNameEn = file.getAbsolutePath() + "2_enc";
+		Files.write(Paths.get(file.getAbsolutePath() + "_enc"), data, StandardOpenOption.CREATE_NEW);
+		fileNameEn = file.getAbsolutePath() + "_enc";
 
 	}
-/**
- * This allows multiple files to be encrypted.
- * @param encs
- * @param files
- * @throws IOException
- */
+	/**
+	 * This allows multiple files to be encrypted.
+	 * @param encs
+	 * @param files
+	 * @throws IOException
+	 */
 	public void writeFileEn(ArrayList<byte[]> encs, File [] files) throws IOException {
 		for (int i = 0; i < encs.size(); i++) {
 			writeFileEn(encs.get(i), files[i]);
@@ -210,9 +170,9 @@ public class FileEncryptor {
 	}
 
 	public void writeFileDe(byte[] data) throws IOException {
-		Files.write(Paths.get(file.getAbsolutePath() + "2_dec"), data, StandardOpenOption.CREATE_NEW);
-		fileNameDe =  file.getName()+"2_dec";
-		Files.copy(Paths.get(new File(fileNameDe).toURI()), new  FileOutputStream ("web/"+fileNameDe));
+		Files.write(Paths.get(file.getAbsolutePath() + "_dec"), data, StandardOpenOption.CREATE_NEW);
+		fileNameDe =  file.getName()+"_dec";
+		Files.copy(Paths.get(new File(fileNameDe).toURI()), new FileOutputStream ("web/"+fileNameDe));
 	}
 
 	public String getFileNameDe() {

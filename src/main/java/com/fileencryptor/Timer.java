@@ -6,6 +6,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 @EnableScheduling
+/**
+ * the timer for the program, once the pinging stops. 
+ * It waits 3000 miliseconds before exiting the program and closing down the server
+ * @author paradox
+ *
+ */
 public class Timer {
 
 	static long lastaccessed = System.currentTimeMillis();;
@@ -13,11 +19,8 @@ public class Timer {
 	@Scheduled(fixedRate = 1000)
 	public void reverter() {
 		long current = (System.currentTimeMillis());
-		System.out.println("current time "+current);
 		long lastTime = lastaccessed;
-		System.out.println("lastTime  "+lastTime);
 		double diff = ((current - lastTime)  / 1000);
-		System.out.println("diff : "+diff);
 		if (diff >= 3.0) {
 			System.exit(0);
 

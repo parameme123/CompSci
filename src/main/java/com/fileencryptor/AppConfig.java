@@ -5,11 +5,14 @@ import java.util.concurrent.Executors;
 
 import javax.servlet.MultipartConfigElement;
 
+import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.server.handler.HandlerWrapper;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.MultipartAutoConfiguration;
@@ -42,12 +45,10 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 /**
  * 
  *Java Config for Java Beans 
- * 
- * @author Richard, Adam, Curries
- *
  */
 
 
+@SuppressWarnings("unused")
 @Configuration
 @ComponentScan("com.fileencryptor")
 @Import({ThymeleafAutoConfiguration.class, DispatcherServlet.class, StandardServletMultipartResolver.class })
@@ -56,24 +57,26 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 
 	private ApplicationContext applicationContext;
 
+	/** max file size increased from 1mb to 25mb to apply to gmail size limit
+	 * 
+	 * @return MultipartConfigElement multipartConfigElement
+	 */
+
+	@Bean
+	public MultipartConfigElement multipartConfigElement() {
+		MultipartProperties multipartProperties = new MultipartProperties();
+		multipartProperties.setMaxFileSize("25MB");
+		multipartProperties.setMaxRequestSize("25MB");
+		multipartProperties.setFileSizeThreshold("25MB");
+		return multipartProperties.createMultipartConfig();
+	}
+
 	/**
 	 * Creates a ViewResolver allows HTML to be render and viewed.
 	 * 
 	 * @return ViewResolver
 	 */
-	
-	 @Bean
-		public MultipartConfigElement multipartConfigElement() {
-		 MultipartProperties multipartProperties = new MultipartProperties();
-		 multipartProperties.setMaxFileSize("25MB");
-		 multipartProperties.setMaxRequestSize("25MB");
-		 multipartProperties.setFileSizeThreshold("25MB");
-			return multipartProperties.createMultipartConfig();
-		}
-	 
-	 
-	
-	
+
 	@Bean
 	public ViewResolver viewResolver() {
 		ThymeleafViewResolver resolver = new ThymeleafViewResolver();
@@ -81,16 +84,16 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 
 		return resolver;
 	}
-	
-	
-	
-	 @Bean
-     public TaskScheduler taskExecutor () {
-         return new ConcurrentTaskScheduler(Executors.newScheduledThreadPool(3));
-     }
-	
+
+
+
+	@Bean
+	public TaskScheduler taskExecutor () {
+		return new ConcurrentTaskScheduler(Executors.newScheduledThreadPool(3));
+	}
+
 	/**
-	 * Tells the server to user Spring template Engine#
+	 * Tells the server to user Spring template Engine
 	 * 
 	 * @return TemplateEngine
 	 */
@@ -103,9 +106,9 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 
 		return engine;
 	}
-	
+
 	/**
-	 * Creates a JettyEmbededServer to expose endpoints
+	 * Creates a JettyEmbededServer to expose endpoints e.g /file or /gmail
 	 * 
 	 * @return JettyEmbeddedServletContainerFactory
 	 */
@@ -118,6 +121,15 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 
 			@Override
 			public void customize(Server server) {
+				 SslContextFactory sslContextFactory = new SslContextFactory();
+                 sslContextFactory.setKeyStorePath("jetty.pkcs12");
+                 sslContextFactory.setKeyStorePassword("marcopolo123");
+                 sslContextFactory.setKeyStoreType("PKCS12");
+                 ServerConnector sslConnector = new ServerConnector(	server, sslContextFactory);
+                 sslConnector.setPort(443);
+                 server.setConnectors(new Connector[] { sslConnector });
+				
+				
 				setHandlerMaxHttpPostSize(2000 * 1024 * 1024, server.getHandlers());
 				
 			}
@@ -146,8 +158,9 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 		return factory;
 	}
 
+
 	/**
-	 * Tells the resovles to user HTML parsing
+	 * Tells the resolver to user HTML parsing *reading the html source*
 	 * @return  ITemplateResolver
 	 */
 
