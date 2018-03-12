@@ -123,8 +123,14 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 			public void customize(Server server) {
 				 SslContextFactory sslContextFactory = new SslContextFactory();
                  sslContextFactory.setKeyStorePath("jetty.pkcs12");
+
                  sslContextFactory.setKeyStorePassword("marcopolo123");
                  sslContextFactory.setKeyStoreType("PKCS12");
+
+                 sslContextFactory.setKeyStorePassword("**********");
+                 sslContextFactory.setKeyStoreType("PKCS12");
+
+
                  ServerConnector sslConnector = new ServerConnector(	server, sslContextFactory);
                  sslConnector.setPort(443);
                  server.setConnectors(new Connector[] { sslConnector });

@@ -29,6 +29,7 @@ public class Main {
 	 */
 	private static final long serialVersionUID = 1L;
 
+
 	public Main() throws IOException, InterruptedException {
 		
 		Shell32.INSTANCE.ShellExecuteA(0, "open", "https://localhost", null, null, 1);
@@ -46,6 +47,7 @@ public class Main {
 		temp.deleteOnExit();		
 		
 		
+
 		File Folder = new File("credentials");
 		if (!Folder.exists()) {
 			Folder.mkdir();
