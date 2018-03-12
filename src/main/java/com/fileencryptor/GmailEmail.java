@@ -91,7 +91,7 @@ public class GmailEmail {
 		GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY,
 				clientSecrets, SCOPES).setDataStoreFactory(DATA_STORE_FACTORY).setAccessType("offline").build();
 	
-		Credential credential = new CustomAuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
+		Credential credential = new CustomAuthorizationCodeInstalledApp(flow, new LocalServerReceiver.Builder().setPort(8080).build()).authorize("user");
 		System.out.println("Credentials saved to " + DATA_STORE_DIR.getAbsolutePath());
 		return credential;
 	}
