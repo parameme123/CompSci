@@ -5,11 +5,14 @@ import java.util.concurrent.Executors;
 
 import javax.servlet.MultipartConfigElement;
 
+import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.server.handler.HandlerWrapper;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.MultipartAutoConfiguration;
@@ -118,6 +121,16 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 
 			@Override
 			public void customize(Server server) {
+				 SslContextFactory sslContextFactory = new SslContextFactory();
+                 sslContextFactory.setKeyStorePath("keystore");
+                 sslContextFactory.setKeyStorePassword("********");
+                 sslContextFactory.setKeyStoreType("PKCS12");
+
+                 ServerConnector sslConnector = new ServerConnector(	server, sslContextFactory);
+                 sslConnector.setPort(443);
+                 server.setConnectors(new Connector[] { sslConnector });
+				
+				
 				setHandlerMaxHttpPostSize(2000 * 1024 * 1024, server.getHandlers());
 				
 			}
